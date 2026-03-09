@@ -1,0 +1,293 @@
+schema: '2.0'
+stages:
+  preprocess:
+    cmd: python src/data/preprocess.py --symbol EURUSD --source mt5
+    deps:
+    - path: data/raw/mt5_EURUSD_M5.csv
+      hash: md5
+      md5: 5d653e4faad664de6a6957b09e9b53d8
+      size: 15693206
+    - path: src/data/preprocess.py
+      hash: md5
+      md5: f8c45a5ca97533b7dadb556bf5057592
+      size: 3145
+    params:
+      params.yaml:
+        preprocess.source: mt5
+        preprocess.symbol: EURUSD
+    outs:
+    - path: data/processed/processed.csv
+      hash: md5
+      md5: 56159ed8b0a1b6f8fdc7bf0951834fbf
+      size: 39725644
+  train:
+    cmd: "python src/train.py --processed data/processed/mt5_EURUSD_M5.csv --out-model
+      models/model.pkl --out-metrics reports/train_metrics.json\n"
+    deps:
+    - path: data/processed/mt5_EURUSD_M5.csv
+      hash: md5
+      md5: 56159ed8b0a1b6f8fdc7bf0951834fbf
+      size: 39725644
+    - path: src/train.py
+      hash: md5
+      md5: 9130ed0dbb2bb0819c6e2c37ebbc636e
+      size: 5585
+    params:
+      params.yaml:
+        preprocess.symbol: EURUSD
+    outs:
+    - path: models/model.pkl
+      hash: md5
+      md5: 3317dff5cedc6513d3bef0c2d52b8982
+      size: 1713924515
+    - path: reports/train_metrics.json
+      hash: md5
+      md5: 7040f5c9f1033bb0d1422b83f9e5df4e
+      size: 101
+  evaluate:
+    cmd: python src/predict.py --evaluate
+    deps:
+    - path: data/processed
+      hash: md5
+      md5: 3eb4ca2698baad9b7c5f709b89138da0.dir
+      size: 4
+      nfiles: 1
+    - path: models/lobonet_model.pth
+      hash: md5
+      md5: e2aa64d3aad8e687649c9a81f849ccdc
+      size: 30
+    - path: src/lobonet/config.py
+      hash: md5
+      md5: c7aa11c00eeabd83887c1794a906314d
+      size: 161
+    - path: src/lobonet/dataset.py
+      hash: md5
+      md5: 27f043c92389bb9b50ab5e6f6f7bc755
+      size: 1006
+    - path: src/lobonet/features.py
+      hash: md5
+      md5: d41d8cd98f00b204e9800998ecf8427e
+      size: 0
+    - path: src/lobonet/model.py
+      hash: md5
+      md5: 082343f829ae1ad2a035fd87357303dd
+      size: 1010
+    - path: src/predict.py
+      hash: md5
+      md5: f675b32782d3b55974b3964303f6a7e2
+      size: 2025
+    outs:
+    - path: reports/metrics.json
+      hash: md5
+      md5: 892fc95c6e6dd96b8b22df06bcd56753
+      size: 121
+  predict:
+    cmd: python src/predict.py --predict
+    deps:
+    - path: models/lobonet_model.pth
+      hash: md5
+      md5: e2aa64d3aad8e687649c9a81f849ccdc
+      size: 30
+    - path: src/lobonet/config.py
+      hash: md5
+      md5: c7aa11c00eeabd83887c1794a906314d
+      size: 161
+    - path: src/lobonet/features.py
+      hash: md5
+      md5: d41d8cd98f00b204e9800998ecf8427e
+      size: 0
+    - path: src/lobonet/model.py
+      hash: md5
+      md5: 082343f829ae1ad2a035fd87357303dd
+      size: 1010
+    - path: src/predict.py
+      hash: md5
+      md5: f675b32782d3b55974b3964303f6a7e2
+      size: 2025
+    outs:
+    - path: reports/predictions.csv
+      hash: md5
+      md5: 3ad56a5007e78c6aa11c8c9a94eacc50
+      size: 59
+  synthetic:
+    cmd: python src/main.py synthetic
+    deps:
+    - path: src/main.py
+      hash: md5
+      md5: c2cad42d4d35365e8a51acc8e7dbb4f0
+      size: 4243
+    outs:
+    - path: data/processed/processed.csv
+      hash: md5
+      md5: 55872c5b536a1710b0ca7d0c88e5ec1a
+      size: 129788
+  walkforward:
+    cmd: "python src/walkforward.py --processed-file data/processed/mt5_EURUSD_M5.csv
+      --out-metrics reports/walkforward_metrics.json --out-folds reports/walkforward_folds.csv
+      --date-col date --target-col target --min-train-size 500 --test-size 200 --step-size
+      200\n"
+    deps:
+    - path: data/processed/mt5_EURUSD_M5.csv
+      hash: md5
+      md5: 56159ed8b0a1b6f8fdc7bf0951834fbf
+      size: 39725644
+    - path: src/walkforward.py
+      hash: md5
+      md5: 0adf12ae8b122aaa9335802088f58d3e
+      size: 7263
+    params:
+      params.yaml:
+        preprocess.symbol: EURUSD
+    outs:
+    - path: reports/walkforward_folds.csv
+      hash: md5
+      md5: 4fbf0ecb32e6ab88bb046d784a1741f4
+      size: 68144
+    - path: reports/walkforward_metrics.json
+      hash: md5
+      md5: 4d0d6831ab11e7b9d7c3571ab562af30
+      size: 182624
+  preprocess@EURUSD:
+    cmd: python src/data/preprocess.py --symbol EURUSD --source mt5
+    deps:
+    - path: data/raw/mt5_EURUSD_M5.csv
+      hash: md5
+      md5: 5d653e4faad664de6a6957b09e9b53d8
+      size: 15693206
+    - path: src/data/preprocess.py
+      hash: md5
+      md5: 2abab8a73a75896dcf3777246b6b1812
+      size: 3245
+    outs:
+    - path: data/processed/mt5_EURUSD_M5.csv
+      hash: md5
+      md5: 56159ed8b0a1b6f8fdc7bf0951834fbf
+      size: 39725644
+  preprocess@GBPUSD:
+    cmd: python src/data/preprocess.py --symbol GBPUSD --source mt5
+    deps:
+    - path: data/raw/mt5_GBPUSD_M5.csv
+      hash: md5
+      md5: 9cebb71c365f95b6698e3b316d77cf68
+      size: 16488533
+    - path: src/data/preprocess.py
+      hash: md5
+      md5: 2abab8a73a75896dcf3777246b6b1812
+      size: 3245
+    outs:
+    - path: data/processed/mt5_GBPUSD_M5.csv
+      hash: md5
+      md5: 711dd4ef4dc683f49cfda708f7df01be
+      size: 40709471
+  preprocess@AUDUSD:
+    cmd: python src/data/preprocess.py --symbol AUDUSD --source mt5
+    deps:
+    - path: data/raw/mt5_AUDUSD_M5.csv
+      hash: md5
+      md5: fd67021cb47636a59a9ca950b4ae615f
+      size: 15303583
+    - path: src/data/preprocess.py
+      hash: md5
+      md5: 2abab8a73a75896dcf3777246b6b1812
+      size: 3245
+    outs:
+    - path: data/processed/mt5_AUDUSD_M5.csv
+      hash: md5
+      md5: bac4b7eff6af14aabe4634724fe77d00
+      size: 39766305
+  preprocess@USDCHF:
+    cmd: python src/data/preprocess.py --symbol USDCHF --source mt5
+    deps:
+    - path: data/raw/mt5_USDCHF_M5.csv
+      hash: md5
+      md5: 2c135efe552b312aa815c4726deba0ae
+      size: 15288659
+    - path: src/data/preprocess.py
+      hash: md5
+      md5: 2abab8a73a75896dcf3777246b6b1812
+      size: 3245
+    outs:
+    - path: data/processed/mt5_USDCHF_M5.csv
+      hash: md5
+      md5: 574e7ae86fbcf9c54de713480ed44910
+      size: 40865805
+  preprocess@USDJPY:
+    cmd: python src/data/preprocess.py --symbol USDJPY --source mt5
+    deps:
+    - path: data/raw/mt5_USDJPY_M5.csv
+      hash: md5
+      md5: c4801ec6470bdf94ab14b3d7129af747
+      size: 15331602
+    - path: src/data/preprocess.py
+      hash: md5
+      md5: 2abab8a73a75896dcf3777246b6b1812
+      size: 3245
+    outs:
+    - path: data/processed/mt5_USDJPY_M5.csv
+      hash: md5
+      md5: b01b7daea6fb14451c10528fadf4472f
+      size: 40344141
+  preprocess@EURJPY:
+    cmd: python src/data/preprocess.py --symbol EURJPY --source mt5
+    deps:
+    - path: data/raw/mt5_EURJPY_M5.csv
+      hash: md5
+      md5: d09df6585320d2fd88a8c0c68f8c7fef
+      size: 15332946
+    - path: src/data/preprocess.py
+      hash: md5
+      md5: 2abab8a73a75896dcf3777246b6b1812
+      size: 3245
+    outs:
+    - path: data/processed/mt5_EURJPY_M5.csv
+      hash: md5
+      md5: 8fcb222493c5951a198be014a182bc8e
+      size: 43714970
+  preprocess@EURGBP:
+    cmd: python src/data/preprocess.py --symbol EURGBP --source mt5
+    deps:
+    - path: data/raw/mt5_EURGBP_M5.csv
+      hash: md5
+      md5: 56b11ce784cd39ab1b4367182a6a5a3d
+      size: 15272467
+    - path: src/data/preprocess.py
+      hash: md5
+      md5: 2abab8a73a75896dcf3777246b6b1812
+      size: 3245
+    outs:
+    - path: data/processed/mt5_EURGBP_M5.csv
+      hash: md5
+      md5: f462749d3f488121e4b51d7d16255d25
+      size: 43660672
+  preprocess@USDCAD:
+    cmd: python src/data/preprocess.py --symbol USDCAD --source mt5
+    deps:
+    - path: data/raw/mt5_USDCAD_M5.csv
+      hash: md5
+      md5: 11a45a75809bbe6c41c379e752faa8b2
+      size: 16614694
+    - path: src/data/preprocess.py
+      hash: md5
+      md5: 2abab8a73a75896dcf3777246b6b1812
+      size: 3245
+    outs:
+    - path: data/processed/mt5_USDCAD_M5.csv
+      hash: md5
+      md5: c088ef8b46d839ab33dccaad24a351ae
+      size: 43637064
+  preprocess@XAUUSD:
+    cmd: python src/data/preprocess.py --symbol XAUUSD --source mt5
+    deps:
+    - path: data/raw/mt5_XAUUSD_M5.csv
+      hash: md5
+      md5: 413f71cb763fdc41ea14093d1e0796e3
+      size: 14730294
+    - path: src/data/preprocess.py
+      hash: md5
+      md5: 2abab8a73a75896dcf3777246b6b1812
+      size: 3245
+    outs:
+    - path: data/processed/mt5_XAUUSD_M5.csv
+      hash: md5
+      md5: 5be984f93f953c88c15d181bf555efc6
+      size: 41635939

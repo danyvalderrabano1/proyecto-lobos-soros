@@ -1,0 +1,9 @@
+/metrics.json
+/predictions.csv
+/walkforward_metrics.json
+/walkforward_folds.csv
+/train_metrics.json
+
+# Todos los reports generados
+*
+\!.gitignore

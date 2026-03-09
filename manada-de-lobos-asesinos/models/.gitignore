@@ -1,0 +1,8 @@
+/model.pkl
+
+*.pkl
+*.pth
+
+# Todos los artifacts de modelos
+*
+\!.gitignore

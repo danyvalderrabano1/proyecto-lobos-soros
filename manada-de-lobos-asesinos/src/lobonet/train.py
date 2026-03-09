@@ -1,11 +1,14 @@
 # lobonet/train.py
 
+from pathlib import Path
 import torch
 import torch.nn as nn
 import torch.optim as optim
 
 from lobonet.model import LoboNet
 from lobonet.config import INPUT_SIZE, EPOCHS, LEARNING_RATE
+
+CKPT_PATH = Path(__file__).parent.parent.parent / "models" / "lobonet_model.pth"
 
 
 def train():
@@ -72,14 +75,15 @@ def train():
     # =========================
     # 6) Guardar checkpoint
     # =========================
+    CKPT_PATH.parent.mkdir(parents=True, exist_ok=True)
     torch.save({
         "model_state_dict": model.state_dict(),
         "input_size": INPUT_SIZE,
         "epochs": EPOCHS,
         "learning_rate": LEARNING_RATE
-    }, "lobonet_model.pth")
+    }, CKPT_PATH)
 
-    print("Modelo guardado: lobonet_model.pth")
+    print(f"Modelo guardado: {CKPT_PATH}")
     print("Entrenamiento finalizado.")
 
 

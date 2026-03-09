@@ -1,8 +1,55 @@
 stages:
   preprocess:
-    cmd: python src/main.py preprocess
+    foreach:
+      - EURUSD
+      - GBPUSD
+      - AUDUSD
+      - USDCHF
+      - USDJPY
+      - EURJPY
+      - EURGBP
+      - USDCAD
+      - XAUUSD
+    do:
+      cmd: python src/data/preprocess.py --symbol ${item} --source mt5
+      deps:
+        - data/raw/mt5_${item}_M5.csv
+        - src/data/preprocess.py
+      outs:
+        - data/processed/mt5_${item}_M5.csv
+
+  walkforward:
+    cmd: >
+      python src/walkforward.py
+      --processed-file data/processed/mt5_${preprocess.symbol}_M5.csv
+      --out-metrics reports/walkforward_metrics.json
+      --out-folds reports/walkforward_folds.csv
+      --date-col date
+      --target-col target
+      --min-train-size 500
+      --test-size 200
+      --step-size 200
+    params:
+      - preprocess.symbol
     deps:
-    - data/raw
-    - src/main.py
+      - data/processed/mt5_${preprocess.symbol}_M5.csv
+      - src/walkforward.py
     outs:
-    - data/processed
+      - reports/walkforward_metrics.json
+      - reports/walkforward_folds.csv
+
+  train:
+    cmd: >
+      python src/train.py
+      --processed data/processed/mt5_${preprocess.symbol}_M5.csv
+      --out-model models/model.pkl
+      --out-metrics reports/train_metrics.json
+    params:
+      - preprocess.symbol
+    deps:
+      - data/processed/mt5_${preprocess.symbol}_M5.csv
+      - src/train.py
+    outs:
+      - models/model.pkl
+    metrics:
+      - reports/train_metrics.json

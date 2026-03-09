@@ -43,3 +43,9 @@ src/mlflow.db
 # ================================
 *.pth
 *.pt
+# Claude Code
+.claude/
+
+# DVC raw data
+data/raw/mt5_*.csv
+data/raw/tv_*.csv
