@@ -14,6 +14,10 @@ stages:
       cmd: python src/data/preprocess.py --symbol ${item} --source mt5
       deps:
         - data/raw/mt5_${item}_M5.csv
+        - data/raw/fred_DXY.csv
+        - data/raw/fred_VIX.csv
+        - data/raw/fred_US10Y.csv
+        - data/raw/fred_FED.csv
         - src/data/preprocess.py
       outs:
         - data/processed/mt5_${item}_M5.csv

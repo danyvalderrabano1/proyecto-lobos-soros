@@ -2,18 +2,25 @@
 """
 preprocess.py — Convierte datos MT5 crudos en features para el pipeline DVC.
 
-Features generadas:
+Features OHLCV:
   ret1        — retorno 1 barra
   ret3_mean   — media de retornos 3 barras
   ret10_mean  — media de retornos 10 barras
   ret10_std   — volatilidad 10 barras
   hl_range    — rango high-low normalizado (proxy volatilidad intra-barra)
   spread_norm — spread normalizado por close
+
+Features macro (FRED, forward-fill diario -> M5):
+  DXY         — Trade Weighted Dollar Index
+  VIX         — CBOE Volatility Index
+  US10Y       — Rendimiento Tesoro 10Y
+  FED         — Fed Funds Rate
+
   target      — retorno de la siguiente barra (variable a predecir)
 
 Uso:
   python src/data/preprocess.py --symbol EURUSD
-  python src/data/preprocess.py --symbol XAUUSD --raw-dir data/raw --out data/processed/processed.csv
+  python src/data/preprocess.py --symbol XAUUSD --raw-dir data/raw
 """
 
 import argparse
@@ -22,8 +29,55 @@ from pathlib import Path
 import pandas as pd
 
 
-def build_features(df: pd.DataFrame) -> pd.DataFrame:
-    c = df["close"]
+# Series FRED disponibles (nombre columna -> nombre archivo)
+_FRED_SERIES = ["DXY", "VIX", "US10Y", "FED"]
+
+
+def load_macro(raw_dir: Path) -> pd.DataFrame | None:
+    """
+    Carga todas las series FRED disponibles en raw_dir y las combina en un
+    DataFrame diario indexado por fecha (sin timezone). Devuelve None si no
+    hay ningún archivo fred_*.csv.
+    """
+    frames = []
+    for name in _FRED_SERIES:
+        path = raw_dir / f"fred_{name}.csv"
+        if path.exists():
+            df = pd.read_csv(path, parse_dates=["date"])
+            df = df.set_index(pd.to_datetime(df["date"]).dt.normalize()).drop(columns="date")
+            frames.append(df)
+
+    if not frames:
+        return None
+
+    macro = pd.concat(frames, axis=1)
+    macro.index = macro.index.tz_localize(None)
+    macro = macro.sort_index()
+    return macro
+
+
+def merge_macro(features: pd.DataFrame, macro: pd.DataFrame) -> pd.DataFrame:
+    """
+    Hace un forward-fill de los datos macro diarios sobre las barras M5.
+    Para cada barra se toma el último valor macro conocido hasta esa fecha.
+    """
+    # Fechas de las barras normalizadas a día (sin timezone)
+    bar_dates = pd.to_datetime(features["date"]).dt.tz_localize(None).dt.normalize()
+
+    # Expandir el índice macro a todos los días del rango y forward-fill
+    full_range = pd.date_range(bar_dates.min(), bar_dates.max(), freq="D")
+    macro_full = macro.reindex(full_range).ffill().bfill()
+
+    # Mapear cada barra M5 a su valor macro del día
+    macro_values = macro_full.loc[bar_dates.values].reset_index(drop=True)
+    for col in macro_values.columns:
+        features[col] = macro_values[col].values
+
+    return features
+
+
+def build_features(df: pd.DataFrame, macro: pd.DataFrame | None = None) -> pd.DataFrame:
+    c    = df["close"]
     ret1 = c.pct_change(1)
 
     features = pd.DataFrame({
@@ -33,12 +87,16 @@ def build_features(df: pd.DataFrame) -> pd.DataFrame:
         "ret10_mean":  ret1.rolling(10).mean(),
         "ret10_std":   ret1.rolling(10).std(),
         "hl_range":    (df["high"] - df["low"]) / c,
-        "spread_norm": df["spread"] / (c * 10_000),   # spread en pips / precio
-        "target":      ret1.shift(-1),                 # retorno de la siguiente barra
+        "spread_norm": df["spread"] / (c * 10_000),
+        "target":      ret1.shift(-1),
     })
 
     # Elimina filas con NaN (primeras 10 por rolling + última por shift)
     features = features.dropna().reset_index(drop=True)
+
+    if macro is not None:
+        features = merge_macro(features, macro)
+
     return features
 
 
@@ -54,11 +112,12 @@ def main() -> int:
     ap.add_argument("--raw-dir", type=str, default="data/raw",
                     help="Directorio con CSVs crudos (default: data/raw)")
     ap.add_argument("--out",     type=str, default=None,
-                    help="Ruta del CSV procesado de salida (default: data/processed/mt5_{symbol}_M5.csv)")
+                    help="Ruta de salida (default: data/processed/{source}_{symbol}_M5.csv)")
     args = ap.parse_args()
 
-    raw_path = Path(args.raw_dir) / f"{args.source}_{args.symbol}_M5.csv"
-    out_path  = Path(args.out) if args.out else Path("data/processed") / f"{args.source}_{args.symbol}_M5.csv"
+    raw_dir  = Path(args.raw_dir)
+    raw_path = raw_dir / f"{args.source}_{args.symbol}_M5.csv"
+    out_path = Path(args.out) if args.out else Path("data/processed") / f"{args.source}_{args.symbol}_M5.csv"
 
     if not raw_path.exists():
         raise FileNotFoundError(
@@ -66,10 +125,16 @@ def main() -> int:
             f"Ejecuta primero: python src/data/fetch_data.py --sources {args.source}"
         )
 
-    print(f"[PREPROCESS] Leyendo {raw_path} …")
+    print(f"[PREPROCESS] Leyendo {raw_path}")
     df = pd.read_csv(raw_path, parse_dates=["date"])
 
-    features = build_features(df)
+    macro = load_macro(raw_dir)
+    if macro is not None:
+        print(f"[PREPROCESS] Macro features cargadas: {list(macro.columns)}")
+    else:
+        print("[PREPROCESS] Sin datos macro (data/raw/fred_*.csv no encontrados)")
+
+    features = build_features(df, macro)
 
     out_path.parent.mkdir(parents=True, exist_ok=True)
     features.to_csv(out_path, index=False)
