@@ -23,37 +23,58 @@ stages:
         - data/processed/mt5_${item}_M5.csv
 
   walkforward:
-    cmd: >
-      python src/walkforward.py
-      --processed-file data/processed/mt5_${preprocess.symbol}_M5.csv
-      --out-metrics reports/walkforward_metrics.json
-      --out-folds reports/walkforward_folds.csv
-      --date-col date
-      --target-col target
-      --min-train-size 500
-      --test-size 200
-      --step-size 200
-    params:
-      - preprocess.symbol
-    deps:
-      - data/processed/mt5_${preprocess.symbol}_M5.csv
-      - src/walkforward.py
-    outs:
-      - reports/walkforward_metrics.json
-      - reports/walkforward_folds.csv
+    foreach:
+      - EURUSD
+      - GBPUSD
+      - AUDUSD
+      - USDCHF
+      - USDJPY
+      - EURJPY
+      - EURGBP
+      - USDCAD
+      - XAUUSD
+    do:
+      cmd: >
+        python src/walkforward.py
+        --processed-file data/processed/mt5_${item}_M5.csv
+        --out-metrics reports/walkforward_metrics_${item}.json
+        --out-folds reports/walkforward_folds_${item}.csv
+        --date-col date
+        --target-col target
+        --min-train-size 500
+        --test-size 200
+        --step-size 200
+      deps:
+        - data/processed/mt5_${item}_M5.csv
+        - src/walkforward.py
+      outs:
+        - reports/walkforward_folds_${item}.csv
+      metrics:
+        - reports/walkforward_metrics_${item}.json:
+            cache: false
 
   train:
-    cmd: >
-      python src/train.py
-      --processed data/processed/mt5_${preprocess.symbol}_M5.csv
-      --out-model models/model.pkl
-      --out-metrics reports/train_metrics.json
-    params:
-      - preprocess.symbol
-    deps:
-      - data/processed/mt5_${preprocess.symbol}_M5.csv
-      - src/train.py
-    outs:
-      - models/model.pkl
-    metrics:
-      - reports/train_metrics.json
+    foreach:
+      - EURUSD
+      - GBPUSD
+      - AUDUSD
+      - USDCHF
+      - USDJPY
+      - EURJPY
+      - EURGBP
+      - USDCAD
+      - XAUUSD
+    do:
+      cmd: >
+        python src/train.py
+        --processed data/processed/mt5_${item}_M5.csv
+        --out-model models/model_${item}.pkl
+        --out-metrics reports/train_metrics_${item}.json
+      deps:
+        - data/processed/mt5_${item}_M5.csv
+        - src/train.py
+      outs:
+        - models/model_${item}.pkl
+      metrics:
+        - reports/train_metrics_${item}.json:
+            cache: false

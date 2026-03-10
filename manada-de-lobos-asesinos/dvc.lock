@@ -435,3 +435,399 @@ stages:
       hash: md5
       md5: 638a8c246a000ba42ab5a10b174659ae
       size: 47197919
+  walkforward@EURUSD:
+    cmd: "python src/walkforward.py --processed-file data/processed/mt5_EURUSD_M5.csv
+      --out-metrics reports/walkforward_metrics_EURUSD.json --out-folds reports/walkforward_folds_EURUSD.csv
+      --date-col date --target-col target --min-train-size 500 --test-size 200 --step-size
+      200\n"
+    deps:
+    - path: data/processed/mt5_EURUSD_M5.csv
+      hash: md5
+      md5: fcd84a58bacf37e273e4e0753553c0dc
+      size: 45576212
+    - path: src/walkforward.py
+      hash: md5
+      md5: 0adf12ae8b122aaa9335802088f58d3e
+      size: 7263
+    outs:
+    - path: reports/walkforward_folds_EURUSD.csv
+      hash: md5
+      md5: 4fbf0ecb32e6ab88bb046d784a1741f4
+      size: 68144
+    - path: reports/walkforward_metrics_EURUSD.json
+      hash: md5
+      md5: 4d0d6831ab11e7b9d7c3571ab562af30
+      size: 182624
+  walkforward@GBPUSD:
+    cmd: "python src/walkforward.py --processed-file data/processed/mt5_GBPUSD_M5.csv
+      --out-metrics reports/walkforward_metrics_GBPUSD.json --out-folds reports/walkforward_folds_GBPUSD.csv
+      --date-col date --target-col target --min-train-size 500 --test-size 200 --step-size
+      200\n"
+    deps:
+    - path: data/processed/mt5_GBPUSD_M5.csv
+      hash: md5
+      md5: ebe0d7d222e0c7604535bb26264b386a
+      size: 46560085
+    - path: src/walkforward.py
+      hash: md5
+      md5: 0adf12ae8b122aaa9335802088f58d3e
+      size: 7263
+    outs:
+    - path: reports/walkforward_folds_GBPUSD.csv
+      hash: md5
+      md5: e7a15fc5470fa111b1cc8f80d937d898
+      size: 68065
+    - path: reports/walkforward_metrics_GBPUSD.json
+      hash: md5
+      md5: fc2fb0d4557e29d0fca0b8f9580a0745
+      size: 182545
+  walkforward@AUDUSD:
+    cmd: "python src/walkforward.py --processed-file data/processed/mt5_AUDUSD_M5.csv
+      --out-metrics reports/walkforward_metrics_AUDUSD.json --out-folds reports/walkforward_folds_AUDUSD.csv
+      --date-col date --target-col target --min-train-size 500 --test-size 200 --step-size
+      200\n"
+    deps:
+    - path: data/processed/mt5_AUDUSD_M5.csv
+      hash: md5
+      md5: a1b8ce5f28549d7e6e2fb3463dfe9f32
+      size: 45616895
+    - path: src/walkforward.py
+      hash: md5
+      md5: 0adf12ae8b122aaa9335802088f58d3e
+      size: 7263
+    outs:
+    - path: reports/walkforward_folds_AUDUSD.csv
+      hash: md5
+      md5: 1d96aacb8a2d7aed234a7c79e3447284
+      size: 68161
+    - path: reports/walkforward_metrics_AUDUSD.json
+      hash: md5
+      md5: f31733453a2cdaa1d862b910c5cbdb17
+      size: 182642
+  walkforward@USDCHF:
+    cmd: "python src/walkforward.py --processed-file data/processed/mt5_USDCHF_M5.csv
+      --out-metrics reports/walkforward_metrics_USDCHF.json --out-folds reports/walkforward_folds_USDCHF.csv
+      --date-col date --target-col target --min-train-size 500 --test-size 200 --step-size
+      200\n"
+    deps:
+    - path: data/processed/mt5_USDCHF_M5.csv
+      hash: md5
+      md5: 7a59a83b8c5758e920b0db4954f952f9
+      size: 46715756
+    - path: src/walkforward.py
+      hash: md5
+      md5: 0adf12ae8b122aaa9335802088f58d3e
+      size: 7263
+    outs:
+    - path: reports/walkforward_folds_USDCHF.csv
+      hash: md5
+      md5: cb179c096d0e6944eb7939ec3b53865d
+      size: 68063
+    - path: reports/walkforward_metrics_USDCHF.json
+      hash: md5
+      md5: c618fb0ba41a6597bdea7ee451cd0329
+      size: 182543
+  walkforward@USDJPY:
+    cmd: "python src/walkforward.py --processed-file data/processed/mt5_USDJPY_M5.csv
+      --out-metrics reports/walkforward_metrics_USDJPY.json --out-folds reports/walkforward_folds_USDJPY.csv
+      --date-col date --target-col target --min-train-size 500 --test-size 200 --step-size
+      200\n"
+    deps:
+    - path: data/processed/mt5_USDJPY_M5.csv
+      hash: md5
+      md5: 7f1910e42d55d1d41317c9e9ed14a3aa
+      size: 46194662
+    - path: src/walkforward.py
+      hash: md5
+      md5: 0adf12ae8b122aaa9335802088f58d3e
+      size: 7263
+    outs:
+    - path: reports/walkforward_folds_USDJPY.csv
+      hash: md5
+      md5: 6f46c4130c17fa65f9164870576fd15b
+      size: 68138
+    - path: reports/walkforward_metrics_USDJPY.json
+      hash: md5
+      md5: 019a84b659b72417d17e9b4878372909
+      size: 182618
+  walkforward@EURJPY:
+    cmd: "python src/walkforward.py --processed-file data/processed/mt5_EURJPY_M5.csv
+      --out-metrics reports/walkforward_metrics_EURJPY.json --out-folds reports/walkforward_folds_EURJPY.csv
+      --date-col date --target-col target --min-train-size 500 --test-size 200 --step-size
+      200\n"
+    deps:
+    - path: data/processed/mt5_EURJPY_M5.csv
+      hash: md5
+      md5: 45bbcbf91199e9ace2b9691e80e6a0e0
+      size: 49565514
+    - path: src/walkforward.py
+      hash: md5
+      md5: 0adf12ae8b122aaa9335802088f58d3e
+      size: 7263
+    outs:
+    - path: reports/walkforward_folds_EURJPY.csv
+      hash: md5
+      md5: 3bc0bdde9a9c85f5f8ee15f0720ead77
+      size: 68097
+    - path: reports/walkforward_metrics_EURJPY.json
+      hash: md5
+      md5: 70b766b7736e71456d79ea9067e9b8da
+      size: 182578
+  walkforward@EURGBP:
+    cmd: "python src/walkforward.py --processed-file data/processed/mt5_EURGBP_M5.csv
+      --out-metrics reports/walkforward_metrics_EURGBP.json --out-folds reports/walkforward_folds_EURGBP.csv
+      --date-col date --target-col target --min-train-size 500 --test-size 200 --step-size
+      200\n"
+    deps:
+    - path: data/processed/mt5_EURGBP_M5.csv
+      hash: md5
+      md5: c0ab2ef826a628394407f41e41c8e6e4
+      size: 49511265
+    - path: src/walkforward.py
+      hash: md5
+      md5: 0adf12ae8b122aaa9335802088f58d3e
+      size: 7263
+    outs:
+    - path: reports/walkforward_folds_EURGBP.csv
+      hash: md5
+      md5: fd0a166ef959179414c349894caec68c
+      size: 68249
+    - path: reports/walkforward_metrics_EURGBP.json
+      hash: md5
+      md5: 8570473e891fcda977fadb2445656c4a
+      size: 182730
+  walkforward@USDCAD:
+    cmd: "python src/walkforward.py --processed-file data/processed/mt5_USDCAD_M5.csv
+      --out-metrics reports/walkforward_metrics_USDCAD.json --out-folds reports/walkforward_folds_USDCAD.csv
+      --date-col date --target-col target --min-train-size 500 --test-size 200 --step-size
+      200\n"
+    deps:
+    - path: data/processed/mt5_USDCAD_M5.csv
+      hash: md5
+      md5: 953efd23a43ce3cf811ab57204e191f7
+      size: 49487390
+    - path: src/walkforward.py
+      hash: md5
+      md5: 0adf12ae8b122aaa9335802088f58d3e
+      size: 7263
+    outs:
+    - path: reports/walkforward_folds_USDCAD.csv
+      hash: md5
+      md5: 1eb9c90aa344c1dcd63bfe4ecc669020
+      size: 68175
+    - path: reports/walkforward_metrics_USDCAD.json
+      hash: md5
+      md5: f82ec447b5d0e0d7140d1b6851abf587
+      size: 182656
+  walkforward@XAUUSD:
+    cmd: "python src/walkforward.py --processed-file data/processed/mt5_XAUUSD_M5.csv
+      --out-metrics reports/walkforward_metrics_XAUUSD.json --out-folds reports/walkforward_folds_XAUUSD.csv
+      --date-col date --target-col target --min-train-size 500 --test-size 200 --step-size
+      200\n"
+    deps:
+    - path: data/processed/mt5_XAUUSD_M5.csv
+      hash: md5
+      md5: 638a8c246a000ba42ab5a10b174659ae
+      size: 47197919
+    - path: src/walkforward.py
+      hash: md5
+      md5: 0adf12ae8b122aaa9335802088f58d3e
+      size: 7263
+    outs:
+    - path: reports/walkforward_folds_XAUUSD.csv
+      hash: md5
+      md5: 1ac3a0e365df40295384bf391cf7c1c0
+      size: 64675
+    - path: reports/walkforward_metrics_XAUUSD.json
+      hash: md5
+      md5: cad6be4d4777223f6efa91b3ef22757c
+      size: 173492
+  train@EURUSD:
+    cmd: "python src/train.py --processed data/processed/mt5_EURUSD_M5.csv --out-model
+      models/model_EURUSD.pkl --out-metrics reports/train_metrics_EURUSD.json\n"
+    deps:
+    - path: data/processed/mt5_EURUSD_M5.csv
+      hash: md5
+      md5: fcd84a58bacf37e273e4e0753553c0dc
+      size: 45576212
+    - path: src/train.py
+      hash: md5
+      md5: 9130ed0dbb2bb0819c6e2c37ebbc636e
+      size: 5585
+    outs:
+    - path: models/model_EURUSD.pkl
+      hash: md5
+      md5: 7f6ef576f552c6e1ea4151d68cc60a27
+      size: 1708980589
+    - path: reports/train_metrics_EURUSD.json
+      hash: md5
+      md5: ce924b803f66f74faac03bba6b864c62
+      size: 101
+  train@GBPUSD:
+    cmd: "python src/train.py --processed data/processed/mt5_GBPUSD_M5.csv --out-model
+      models/model_GBPUSD.pkl --out-metrics reports/train_metrics_GBPUSD.json\n"
+    deps:
+    - path: data/processed/mt5_GBPUSD_M5.csv
+      hash: md5
+      md5: ebe0d7d222e0c7604535bb26264b386a
+      size: 46560085
+    - path: src/train.py
+      hash: md5
+      md5: 9130ed0dbb2bb0819c6e2c37ebbc636e
+      size: 5585
+    outs:
+    - path: models/model_GBPUSD.pkl
+      hash: md5
+      md5: dc60aed37d8f508385b1c1ea09b1bad8
+      size: 1713400669
+    - path: reports/train_metrics_GBPUSD.json
+      hash: md5
+      md5: ce5b480fc451544ae9b453c224996702
+      size: 102
+  train@AUDUSD:
+    cmd: "python src/train.py --processed data/processed/mt5_AUDUSD_M5.csv --out-model
+      models/model_AUDUSD.pkl --out-metrics reports/train_metrics_AUDUSD.json\n"
+    deps:
+    - path: data/processed/mt5_AUDUSD_M5.csv
+      hash: md5
+      md5: a1b8ce5f28549d7e6e2fb3463dfe9f32
+      size: 45616895
+    - path: src/train.py
+      hash: md5
+      md5: 9130ed0dbb2bb0819c6e2c37ebbc636e
+      size: 5585
+    outs:
+    - path: models/model_AUDUSD.pkl
+      hash: md5
+      md5: 82be0e64aa50c2efe8e23df6fe633d5f
+      size: 1714127005
+    - path: reports/train_metrics_AUDUSD.json
+      hash: md5
+      md5: b3cb05241e12e3aea80b69aa67b81055
+      size: 103
+  train@USDCHF:
+    cmd: "python src/train.py --processed data/processed/mt5_USDCHF_M5.csv --out-model
+      models/model_USDCHF.pkl --out-metrics reports/train_metrics_USDCHF.json\n"
+    deps:
+    - path: data/processed/mt5_USDCHF_M5.csv
+      hash: md5
+      md5: 7a59a83b8c5758e920b0db4954f952f9
+      size: 46715756
+    - path: src/train.py
+      hash: md5
+      md5: 9130ed0dbb2bb0819c6e2c37ebbc636e
+      size: 5585
+    outs:
+    - path: models/model_USDCHF.pkl
+      hash: md5
+      md5: fd60f027530d2f25d82383e8fe8b5492
+      size: 1709414173
+    - path: reports/train_metrics_USDCHF.json
+      hash: md5
+      md5: 4cabd8addc66042c43a7b2e4f63dce0c
+      size: 103
+  train@USDJPY:
+    cmd: "python src/train.py --processed data/processed/mt5_USDJPY_M5.csv --out-model
+      models/model_USDJPY.pkl --out-metrics reports/train_metrics_USDJPY.json\n"
+    deps:
+    - path: data/processed/mt5_USDJPY_M5.csv
+      hash: md5
+      md5: 7f1910e42d55d1d41317c9e9ed14a3aa
+      size: 46194662
+    - path: src/train.py
+      hash: md5
+      md5: 9130ed0dbb2bb0819c6e2c37ebbc636e
+      size: 5585
+    outs:
+    - path: models/model_USDJPY.pkl
+      hash: md5
+      md5: 0a110f70b551b124f49c377d542b7ad8
+      size: 1717962157
+    - path: reports/train_metrics_USDJPY.json
+      hash: md5
+      md5: 09e702dd92a709bb30ba7e449e76f448
+      size: 103
+  train@EURJPY:
+    cmd: "python src/train.py --processed data/processed/mt5_EURJPY_M5.csv --out-model
+      models/model_EURJPY.pkl --out-metrics reports/train_metrics_EURJPY.json\n"
+    deps:
+    - path: data/processed/mt5_EURJPY_M5.csv
+      hash: md5
+      md5: 45bbcbf91199e9ace2b9691e80e6a0e0
+      size: 49565514
+    - path: src/train.py
+      hash: md5
+      md5: 9130ed0dbb2bb0819c6e2c37ebbc636e
+      size: 5585
+    outs:
+    - path: models/model_EURJPY.pkl
+      hash: md5
+      md5: 7e34b077117f189b0848378ac24fbe64
+      size: 1721874061
+    - path: reports/train_metrics_EURJPY.json
+      hash: md5
+      md5: 7ebe2b843a22e2a1334a8639c9e8b513
+      size: 103
+  train@EURGBP:
+    cmd: "python src/train.py --processed data/processed/mt5_EURGBP_M5.csv --out-model
+      models/model_EURGBP.pkl --out-metrics reports/train_metrics_EURGBP.json\n"
+    deps:
+    - path: data/processed/mt5_EURGBP_M5.csv
+      hash: md5
+      md5: c0ab2ef826a628394407f41e41c8e6e4
+      size: 49511265
+    - path: src/train.py
+      hash: md5
+      md5: 9130ed0dbb2bb0819c6e2c37ebbc636e
+      size: 5585
+    outs:
+    - path: models/model_EURGBP.pkl
+      hash: md5
+      md5: e1144cabf33790a2886cab9baa0104f5
+      size: 1688190445
+    - path: reports/train_metrics_EURGBP.json
+      hash: md5
+      md5: 41e8047c2c49bb5d1bee74d352ff9a4c
+      size: 103
+  train@USDCAD:
+    cmd: "python src/train.py --processed data/processed/mt5_USDCAD_M5.csv --out-model
+      models/model_USDCAD.pkl --out-metrics reports/train_metrics_USDCAD.json\n"
+    deps:
+    - path: data/processed/mt5_USDCAD_M5.csv
+      hash: md5
+      md5: 953efd23a43ce3cf811ab57204e191f7
+      size: 49487390
+    - path: src/train.py
+      hash: md5
+      md5: 9130ed0dbb2bb0819c6e2c37ebbc636e
+      size: 5585
+    outs:
+    - path: models/model_USDCAD.pkl
+      hash: md5
+      md5: 4f159aa3f1da8e9bc8d06fed706543fe
+      size: 1705339117
+    - path: reports/train_metrics_USDCAD.json
+      hash: md5
+      md5: 1fb1a5453b52377c16ee47a051ed940e
+      size: 102
+  train@XAUUSD:
+    cmd: "python src/train.py --processed data/processed/mt5_XAUUSD_M5.csv --out-model
+      models/model_XAUUSD.pkl --out-metrics reports/train_metrics_XAUUSD.json\n"
+    deps:
+    - path: data/processed/mt5_XAUUSD_M5.csv
+      hash: md5
+      md5: 638a8c246a000ba42ab5a10b174659ae
+      size: 47197919
+    - path: src/train.py
+      hash: md5
+      md5: 9130ed0dbb2bb0819c6e2c37ebbc636e
+      size: 5585
+    outs:
+    - path: models/model_XAUUSD.pkl
+      hash: md5
+      md5: d666715de4fdbdd9c6cac61209a0e63a
+      size: 1640207054
+    - path: reports/train_metrics_XAUUSD.json
+      hash: md5
+      md5: ce0523989d1fd46a8d054e024507055a
+      size: 101
